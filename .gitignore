@@ -5,3 +5,4 @@ __pycache__
 migrations
 flask-markdown
 config.py
+venv
