@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, url_for, g, flash
 from werkzeug.utils import redirect
 
-from .. import db
+from app import db
 from pybo.models import Question, Answer, User
 from pybo.forms import QuestionForm, AnswerForm
 from pybo.views.auth_views import login_required

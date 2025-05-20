@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">🚇 실시간 지하철 열차 현황</h1>
+
+    <form class="mb-3" onsubmit="event.preventDefault(); fetchData();">
+        <label for="lineSelect" class="form-label">호선 선택</label>
+        <select id="lineSelect" class="form-select w-auto d-inline">
+            <option value="1호선">1호선</option>
+            <option value="2호선" selected>2호선</option>
+            <option value="3호선">3호선</option>
+            <option value="4호선">4호선</option>
+            <option value="5호선">5호선</option>
+            <option value="6호선">6호선</option>
+            <option value="7호선">7호선</option>
+            <option value="8호선">8호선</option>
+            <option value="9호선">9호선</option>
+            <option value="수인분당선">수인분당선</option>
+            <option value="신분당선">신분당선</option>
+        </select>
+
+        <button type="submit" class="btn btn-primary ms-2">조회하기</button>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover text-nowrap" id="train-table">
+            <thead class="table-dark">
+                <tr>
+                    <th>열차번호</th>
+                    <th>지하철ID</th>
+                    <th>호선명</th>
+                    <th>현재역ID</th>
+                    <th>현재역명</th>
+                    <th>최종수신날짜</th>
+                    <th>최종수신시각</th>
+                    <th>상/하행</th>
+                    <th>종착역ID</th>
+                    <th>종착역명</th>
+                    <th>열차상태</th>
+                    <th>급행여부</th>
+                    <th>막차여부</th>
+                </tr>
+            </thead>
+            <tbody id="train-table-body">
+                <!-- JS로 채워짐 -->
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block script %}
+<script>
+    function fetchData() {
+        const lineId = document.getElementById('lineSelect').value;
+
+        fetch(`/subway/position?line_id=${lineId}`)
+            .then(response => response.json())
+            .then(data => {
+                const list = data.realtimePositionList;
+                const tbody = document.getElementById('train-table-body');
+                tbody.innerHTML = "";
+
+                list.forEach(train => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${train.trainNo}</td>
+                        <td>${train.subwayId}</td>
+                        <td>${train.subwayNm}</td>
+                        <td>${train.statnId}</td>
+                        <td>${train.statnNm}</td>
+                        <td>${train.lastRecptnDt}</td>
+                        <td>${train.recptnDt}</td>
+                        <td>${getUpDownText(train.updnLine)}</td>
+                        <td>${train.statnTid}</td>
+                        <td>${train.statnTnm}</td>
+                        <td>${getStatusText(train.trainSttus)}</td>
+                        <td>${getExpressText(train.directAt)}</td>
+                        <td>${getLastText(train.lstcarAt)}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            })
+            .catch(error => {
+                const tbody = document.getElementById('train-table-body');
+                tbody.innerHTML = `<tr><td colspan="13">❌ 오류: ${error}</td></tr>`;
+            });
+    }
+
+    function getStatusText(code) {
+        switch (code) {
+            case "0": return "진입";
+            case "1": return "도착";
+            case "2": return "출발";
+            case "3": return "전역출발";
+            default: return "알 수 없음";
+        }
+    }
+
+    function getUpDownText(code) {
+        return code === "0" ? "상행" : code === "1" ? "하행" : "미확인";
+    }
+
+    function getExpressText(code) {
+        switch (code) {
+            case "0": return "일반";
+            case "1": return "급행";
+            case "7": return "특급";
+            default: return "미확인";
+        }
+    }
+
+    function getLastText(code) {
+        return code === "1" ? "막차" : "아님";
+    }
+</script>
+{% endblock %}

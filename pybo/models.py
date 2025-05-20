@@ -1,4 +1,4 @@
-from pybo import db
+from app import db
 
 # 질문 추천 Many to Many 관계 적용
 question_voter = db.Table(
@@ -40,3 +40,20 @@ class User(db.Model):
     username = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
+
+# 실시간 지하철 위치 저장
+class TrainPosition(db.Model):
+    __tablename__ = 'train_positions'
+
+    id = db.Column(db.Integer, primary_key=True)
+    train_no = db.Column(db.String(10), nullable=False)
+    subway_id = db.Column(db.String(10), nullable=False)
+    statn_nm = db.Column(db.String(50), nullable=False)
+    statn_id = db.Column(db.String(20))
+    statn_tnm = db.Column(db.String(50))
+    recptn_dt = db.Column(db.DateTime)
+    train_sttus = db.Column(db.Integer)
+    updn_line = db.Column(db.Integer)
+    direct_at = db.Column(db.Integer)
+    lstcar_at = db.Column(db.Integer)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
