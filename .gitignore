@@ -6,3 +6,5 @@ migrations
 flask-markdown
 config.py
 venv
+
+migrations/__pycache__/
