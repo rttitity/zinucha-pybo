@@ -6,7 +6,7 @@ import config
 
 
 def create_app():
-    app = Flask(__name__, static_folder=None)
+    app = Flask(__name__)
     app.config.from_object(config)
 
     # ORM 초기화
