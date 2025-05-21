@@ -2,7 +2,6 @@
 pybo.db
 *.pyc
 __pycache__
-migrations
 flask-markdown
 config.py
 venv
