@@ -1,11 +1,9 @@
 from flask import Blueprint, render_template, jsonify, request, Response
 import requests
 import json
+from config import SUBWAY_POSITION_API_KEY
 
 bp = Blueprint('subway', __name__, url_prefix='/subway')
-
-SUBWAY_POSITION_API_KEY = '69775968786a696e3236656859596b'  # 실시간 지하철 위치 정보 API 키
-
 
 @bp.route('/')
 def subway_page():

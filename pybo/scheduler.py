@@ -5,7 +5,7 @@ from pybo import db
 from pybo.models import TrainPosition
 
 # 🚇 서울시 API 키
-API_KEY = '69775968786a696e3236656859596b'
+from config import SUBWAY_POSITION_API_KEY
 
 # ✅ 실제 API에 맞는 호선 ID 값
 DEFAULT_LINES = ['1호선', '2호선']  # 1호선, 2호선
@@ -18,7 +18,7 @@ def fetch_and_store_positions(app):
     with app.app_context():
         for line_id in DEFAULT_LINES:
             try:
-                url = f"http://swopenAPI.seoul.go.kr/api/subway/{API_KEY}/json/realtimePosition/0/100/{line_id}"
+                url = f"http://swopenAPI.seoul.go.kr/api/subway/{SUBWAY_POSITION_API_KEY}/json/realtimePosition/0/100/{line_id}"
                 res = requests.get(url)
                 data = res.json()
 
