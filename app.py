@@ -32,13 +32,13 @@ def create_app():
     Markdown(app, extensions=['nl2br', 'fenced_code'])
 
     # ✅ APScheduler 초기화 및 작업 등록
-    scheduler.init_app(app)
-    scheduler.start()
-    scheduler.add_job(
-        id='FetchTrainPositions',
-        func=lambda: fetch_and_store_positions(app),
-        trigger='interval',
-        seconds=30
-    )
+    # scheduler.init_app(app)
+    # scheduler.start()
+    # scheduler.add_job(
+    #     id='FetchTrainPositions',
+    #     func=lambda: fetch_and_store_positions(app),
+    #     trigger='interval',
+    #     seconds=30
+    # )
 
     return app
