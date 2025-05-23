@@ -41,7 +41,7 @@ def create_app():
         host=app.config['SESSION_REDIS_HOST'],
         port=app.config['SESSION_REDIS_PORT'],
         # password=app.config['SESSION_REDIS_PASSWORD'],
-        decode_responses=True
+        decode_responses=False
     )
 
     Session(app)
