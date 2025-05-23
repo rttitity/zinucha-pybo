@@ -37,4 +37,5 @@ cryptography
 gunicorn
 python-dotenv
 Flask-Session
-redis
+redis-py-cluster
+redis==3.5.3
