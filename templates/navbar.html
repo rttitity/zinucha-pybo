@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
     <div class="container-fluid">
-        <a class="navbar-brand" href="{{ url_for('main.index') }}">Pybo</a>
+        <a class="navbar-brand" href="{{ url_for('main.index') }}">Zinucha</a>
         <button class="navbar-toggler" type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent"
@@ -21,6 +21,13 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('auth.logout') }}">{{ g.user.username }} (로그아웃)</a>
                 </li>
+                <li class="nav-item">
+                    <span class="nav-link disabled text-muted">
+                        Server: {{ hostname }} ({{ server_ip }}) |
+                        Session: {{ session_id[:8] }}... |
+                        {{ current_time }}
+                    </span>
+                </li>
             </ul>
             {% else %}
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -35,6 +42,13 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('auth.login') }}">로그인</a>
+                </li>
+                <li class="nav-item">
+                    <span class="nav-link disabled text-muted">
+                        Server: {{ hostname }} ({{ server_ip }}) |
+                        Session: {{ session_id[:8] }}... |
+                        {{ current_time }}
+                    </span>
                 </li>
             </ul>
             {% endif %}

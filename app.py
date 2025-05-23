@@ -1,7 +1,10 @@
 from flask import Flask
 from flaskext.markdown import Markdown
 from pybo import db, migrate, scheduler  # ✅ 확장 객체 import
-from pybo.scheduler import fetch_and_store_positions
+from pybo.scheduler import fetch_and_store_positions    # 스케줄 라이브러리
+
+from datetime import datetime
+import socket
 import config
 
 
@@ -41,4 +44,22 @@ def create_app():
     #     seconds=30
     # )
 
+    @app.before_request
+    def set_session_id():
+        from flask import request, session
+        session['_id'] = request.cookies.get('session', 'N/A')
+
+
+    @app.context_processor
+    def inject_server_info():
+        from flask import session
+        return {
+            'hostname': socket.gethostname(),
+            'server_ip': socket.gethostbyname(socket.gethostname()),
+            'session_id': session.get('_id', 'N/A'),
+            'current_time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+        }
+
+
     return app
+
