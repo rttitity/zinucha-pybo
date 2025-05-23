@@ -3,12 +3,11 @@ from flaskext.markdown import Markdown
 from pybo import db, migrate, scheduler  # ✅ 확장 객체 import
 from pybo.scheduler import fetch_and_store_positions    # 스케줄 라이브러리
 from flask_session import Session
-from redis.cluster import RedisCluster
 
 from datetime import datetime
 import socket
 import config
-
+import redis
 
 
 def create_app():
@@ -38,16 +37,11 @@ def create_app():
     Markdown(app, extensions=['nl2br', 'fenced_code'])
 
     # Redis 연결 구성
-    app.config['SESSION_REDIS'] = RedisCluster(
-        startup_nodes=[
-            {
-                "host": app.config['SESSION_REDIS_HOST'],
-                "port": app.config['SESSION_REDIS_PORT']
-            }
-        ],
+    app.config['SESSION_REDIS'] = redis.StrictRedis(
+        host=app.config['SESSION_REDIS_HOST'],
+        port=app.config['SESSION_REDIS_PORT'],
         # password=app.config['SESSION_REDIS_PASSWORD'],
-        decode_responses=True,
-        skip_full_coverage_check=True  # CDB Redis는 전체 슬롯 미커버일 수 있음
+        decode_responses=True
     )
 
     Session(app)
