@@ -37,6 +37,11 @@ def create_app():
     Markdown(app, extensions=['nl2br', 'fenced_code'])
 
     # Redis 연결 구성
+    app.config['SESSION_TYPE'] = 'redis'
+    app.config['SESSION_PERMANENT'] = config.SESSION_PERMANENT
+    app.config['SESSION_USE_SIGNER'] = config.SESSION_USE_SIGNER
+    app.config['SESSION_KEY_PREFIX'] = config.SESSION_KEY_PREFIX
+
     app.config['SESSION_REDIS'] = redis.StrictRedis(
         host=app.config['SESSION_REDIS_HOST'],
         port=app.config['SESSION_REDIS_PORT'],
