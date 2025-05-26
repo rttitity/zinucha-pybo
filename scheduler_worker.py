@@ -3,6 +3,8 @@ from pybo import scheduler
 from app import create_app
 from pybo.scheduler import fetch_and_store_positions
 
+import time
+
 app = create_app()
 with app.app_context():
     scheduler.init_app(app)
@@ -14,4 +16,8 @@ with app.app_context():
         seconds=30
     )
     print("✅ Scheduler is running...")
-    scheduler._event.wait()  # 종료 방지
+    try:
+        while True:
+            time.sleep(1)
+    except (KeyboardInterrupt, SystemExit):
+        print("⛔ Scheduler stopped.")
