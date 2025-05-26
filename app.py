@@ -41,8 +41,6 @@ def create_app():
     app.config['SESSION_PERMANENT'] = config.SESSION_PERMANENT
     app.config['SESSION_USE_SIGNER'] = config.SESSION_USE_SIGNER
     app.config['SESSION_KEY_PREFIX'] = config.SESSION_KEY_PREFIX
-    SESSION_PERMANENT = True
-    PERMANENT_SESSION_LIFETIME = timedelta(minutes=30)
 
     app.config['SESSION_REDIS'] = redis.StrictRedis(
         host=app.config['SESSION_REDIS_HOST'],
