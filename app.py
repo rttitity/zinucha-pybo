@@ -36,18 +36,18 @@ def create_app():
     # Markdown
     Markdown(app, extensions=['nl2br', 'fenced_code'])
 
-    # Redis 연결 구성
-    app.config['SESSION_TYPE'] = 'redis'
-    app.config['SESSION_PERMANENT'] = config.SESSION_PERMANENT
-    app.config['SESSION_USE_SIGNER'] = config.SESSION_USE_SIGNER
-    app.config['SESSION_KEY_PREFIX'] = config.SESSION_KEY_PREFIX
-
-    app.config['SESSION_REDIS'] = redis.StrictRedis(
-        host=app.config['SESSION_REDIS_HOST'],
-        port=app.config['SESSION_REDIS_PORT'],
-        # password=app.config['SESSION_REDIS_PASSWORD'],
-        decode_responses=False
-    )
+    # # Redis 연결 구성
+    # app.config['SESSION_TYPE'] = config.SESSION_TYPE
+    # app.config['SESSION_PERMANENT'] = config.SESSION_PERMANENT
+    # app.config['SESSION_USE_SIGNER'] = config.SESSION_USE_SIGNER
+    # app.config['SESSION_KEY_PREFIX'] = config.SESSION_KEY_PREFIX
+    #
+    # app.config['SESSION_REDIS'] = redis.StrictRedis(
+    #     host=app.config['SESSION_REDIS_HOST'],
+    #     port=app.config['SESSION_REDIS_PORT'],
+    #     # password=app.config['SESSION_REDIS_PASSWORD'],
+    #     decode_responses=False
+    # )
 
     Session(app)
 
@@ -62,10 +62,10 @@ def create_app():
     # )
 
     # Flask 세션 사용시 쿠키에 세션id 저장 - 쿠키 헤더 초과 오류 발생
-    # @app.before_request
-    # def set_session_id():
-    #     from flask import request, session
-    #     session['_id'] = request.cookies.get('session', 'N/A')
+    @app.before_request
+    def set_session_id():
+        from flask import request, session
+        session['_id'] = request.cookies.get('session', 'N/A')
 
 
     @app.context_processor
