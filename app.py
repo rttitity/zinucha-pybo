@@ -29,12 +29,13 @@ def create_app():
 
     def _set_search_path(dbapi_conn, connection_record):
         cur = dbapi_conn.cursor()
+        # 스키마명이 전부 소문자/언더스코어면 따옴표 없어도 됨. 혼용이면 쌍따옴표 필요.
         cur.execute(f'SET search_path TO "{schema}"')
         cur.close()
 
     with app.app_context():
-        engine = db.get_engine(app)      # <- 컨텍스트 안에서 엔진 획득
-        event.listen(engine, "connect", _set_search_path)
+        event.listen(db.engine, "connect", _set_search_path)
+
 
     # 블루프린트 등록
     from pybo.views import main_views, question_views, answer_views, auth_views, subway_view
