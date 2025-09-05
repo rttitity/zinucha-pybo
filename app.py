@@ -21,6 +21,15 @@ def create_app():
     else:
         migrate.init_app(app, db)
 
+    # PostgreSQL 사용시 search_path 강제 세팅
+    from sqlalchemy import event
+    schema = app.config.get("DB_SCHEMA", "myapp")  # config.py에 DB_SCHEMA="원하는스키마"
+    @event.listens_for(db.engine, "connect")
+    def _set_search_path(dbapi_conn, connection_record):
+        cur = dbapi_conn.cursor()
+        cur.execute(f'SET search_path TO "{schema}"')
+        cur.close()
+
     # 블루프린트 등록
     from pybo.views import main_views, question_views, answer_views, auth_views, subway_view
     app.register_blueprint(main_views.bp)
