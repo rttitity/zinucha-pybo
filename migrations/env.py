@@ -5,6 +5,10 @@ from flask import current_app
 
 from alembic import context
 
+
+import sqlalchemy as sa
+from flask import current_app
+
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
@@ -95,11 +99,17 @@ def run_migrations_online():
         conf_args["process_revision_directives"] = process_revision_directives
 
     connectable = get_engine()
+    schema = current_app.config.get("DB_SCHEMA", "myapp")  # ← 사용 스키마
 
     with connectable.connect() as connection:
+        # 🔹 마이그레이션 세션의 search_path를 고정
+        connection.execute(sa.text(f'SET search_path TO "{schema}"'))
+
         context.configure(
             connection=connection,
             target_metadata=get_metadata(),
+            include_schemas=True,            # 🔹 스키마 사용
+            version_table_schema=schema,     # 🔹 alembic_version도 같은 스키마
             **conf_args
         )
 
