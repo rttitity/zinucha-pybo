@@ -99,17 +99,18 @@ def run_migrations_online():
         conf_args["process_revision_directives"] = process_revision_directives
 
     connectable = get_engine()
-    schema = current_app.config.get("DB_SCHEMA", "myapp")  # ← 사용 스키마
+    schema = current_app.config.get("DB_SCHEMA", "myapp")
 
     with connectable.connect() as connection:
-        # 🔹 마이그레이션 세션의 search_path를 고정
+        # ✅ 1) 마이그레이션 세션의 search_path 고정
         connection.execute(sa.text(f'SET search_path TO "{schema}"'))
 
+        # ✅ 2) 버전 테이블 스키마를 명시 (이게 핵심)
         context.configure(
             connection=connection,
             target_metadata=get_metadata(),
-            include_schemas=True,            # 🔹 스키마 사용
-            version_table_schema=schema,     # 🔹 alembic_version도 같은 스키마
+            include_schemas=True,
+            version_table_schema=schema,     # ← 요 줄이 없으면 증상이 재발
             **conf_args
         )
 
