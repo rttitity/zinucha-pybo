@@ -40,3 +40,6 @@ gunicorn
 python-dotenv
 Flask-Session
 redis
+
+# PostgreSQL 사용
+psycopg2-binary

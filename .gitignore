@@ -8,3 +8,5 @@ venv
 
 migrations/__pycache__/
 .env
+
+flask_session
